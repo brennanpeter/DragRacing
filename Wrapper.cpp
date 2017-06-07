@@ -3,13 +3,14 @@
 
 Wrapper::Wrapper() {
     SDL_Init(SDL_INIT_VIDEO);
+    IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
     context = visible;
 
     window = SDL_CreateWindow("Hello", 10, 10, 640, 480, 0);
     renderer = SDL_CreateRenderer(window, -1, 0);
 
 
-    //SDL_Texture * img = IMG_LoadTexture(renderer, "/home/czhanacek/marybday.JPG");
+    SDL_Surface * img = IMG_Load("/home/czhanacek/marybday.JPG");
     SDL_SetRenderDrawColor(renderer, 200, 0, 100, 255);
     SDL_RenderClear(renderer);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -48,6 +49,7 @@ Wrapper::Wrapper() {
 void Wrapper::quitEverything(void)
 {
     // we'll also need to destroy the textures here (once we have some)
+    IMG_Quit();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();

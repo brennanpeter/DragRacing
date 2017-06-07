@@ -1,10 +1,5 @@
 
-#include <SDL2/SDL.h>
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <iostream>
-#include <cstdlib>
+#include "DrawableWithPriority.h"
 
 #pragma once
 
