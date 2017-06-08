@@ -1,6 +1,7 @@
 #include "Wrapper.h"
 #include "Contexts.h"
 
+
 Wrapper::Wrapper() {
     running = true;
     SDL_Init(SDL_INIT_VIDEO);
@@ -10,11 +11,12 @@ Wrapper::Wrapper() {
     window = SDL_CreateWindow("Hello", 10, 10, 800, 600, 0);
     renderer = SDL_CreateRenderer(window, -1, 0);
     SDL_SetRenderDrawColor(renderer, 11, 102, 35, 255);
+    makeTrack();
+    SDL_WarpMouseInWindow(window, 225, 225);
+    //drawables.push_back(new DrawableWithPriority(renderer, std::string("assets/images/marybday.JPG"), 300, 140, 300, 300, 1));
+    //drawables.push_back(new DrawableWithPriority(renderer, std::string("assets/images/awesome.png"), 400, 100, 100, 100, 1));
 
-    drawables.push_back(new DrawableWithPriority(renderer, std::string("assets/images/marybday.JPG"), 300, 140, 300, 300, 1));
-    drawables.push_back(new DrawableWithPriority(renderer, std::string("assets/images/awesome.png"), 400, 100, 100, 100, 1));
-    drawables[0]->setVelocity(0, 0);
-    drawables[1]->setVelocity(0, 0);
+    car1 = new Car(renderer);
     while(running) {
         SDL_Event e;
 
@@ -41,7 +43,13 @@ Wrapper::Wrapper() {
             drawEverything();
             SDL_RenderPresent(renderer);
             SDL_Delay(10);
-            checkForCollision(drawables[0], drawables[1]);
+            //checkForCollision(drawables[0], car1);
+            if(!(checkIfCarOnTrack())) {
+                SDL_SetRenderDrawColor(renderer, 150, 0, 0, 255);
+            }
+            else {
+                SDL_SetRenderDrawColor(renderer, 11, 102, 35, 255);
+            }
             updateEverything();
         }
 
@@ -53,16 +61,36 @@ Wrapper::Wrapper() {
 }
 
 void Wrapper::updateEverything(void) {
-    for(int i = 0; i < drawables.size(); i++) {
-        drawables[i]->onUpdate();
+    car1->onUpdate();
+    // trackPieces don't need to be updated
+}
+
+void Wrapper::makeTrack(void) {
+    makeTrackLine(false, 7, 200, 200);
+    makeTrackLine(true, 7, 550, 200);
+    makeTrackLine(false, 3, 600, 500);
+    makeTrackLine(true, 9, 700, 100);
+    makeTrackLine(false, 10, 200, 100);
+    makeTrackLine(true, 1, 200, 150);
+}
+
+void Wrapper::makeTrackLine(bool vertical, int lengthUnits, int startX, int startY) {
+    if(vertical) {
+        for(int i = 0; i < lengthUnits; i++) {
+            trackPieces.push_back(new TrackPiece(renderer, startX, startY + (i * 50), vertical));
+        }
+    }
+    else {
+        for(int i = 0; i < lengthUnits; i++) {
+            trackPieces.push_back(new TrackPiece(renderer, startX + (i * 50), startY, vertical));
+        }
     }
 }
 
-
 bool Wrapper::checkForCollision(DrawableWithPriority* obj1, DrawableWithPriority* obj2) {
-    for(int i = 0; i < obj1->boundingBoxes.size(); i++) {
-        for(int x = 0; x < obj2->boundingBoxes.size(); x++) {
-            if(SDL_HasIntersection(obj2->boundingBoxes[x], obj1->boundingBoxes[i])) {
+    for(int i = 1; i < obj1->boundingBoxes.size(); i++) {
+        for(int x = 1; x < obj2->boundingBoxes.size(); x++) {
+            if(SDL_HasIntersection(obj2->boundingBoxes[x], obj1->boundingBoxes[i]) == true) {
                 return true;
             }
             else {
@@ -72,6 +100,15 @@ bool Wrapper::checkForCollision(DrawableWithPriority* obj1, DrawableWithPriority
     }
 }
 
+bool Wrapper::checkIfCarOnTrack(void) {
+    bool ontrack = false;
+    for(int i = 0; i < trackPieces.size(); i++) {
+        if(checkForCollision(car1, trackPieces[i])) {
+            ontrack = true;
+        }
+    }
+    return ontrack;
+}
 
 void Wrapper::quitEverything(void) {
     IMG_Quit();
@@ -101,13 +138,15 @@ void Wrapper::handleKeyEvent(SDL_Event e) {
 }
 
 void Wrapper::deleteDrawables(void) {
-    for(int i = 0; i < drawables.size(); i++) {
-        delete drawables[i];
+    delete car1;
+
+    for(int i = 0; i < trackPieces.size(); i++) {
+        delete trackPieces[i];
     }
 }
 
 void Wrapper::handleMouseMotionEvent(SDL_Event e) {
-    drawables[1]->setPosition(e.motion.x - (drawables[1]->getWidth() / 2), e.motion.y - (drawables[1]->getWidth() / 2));
+    car1->setPosition(e.motion.x - (car1->getWidth() / 2), e.motion.y - (car1->getWidth() / 2));
 }
 
 void Wrapper::handleMouseWheelEvent(SDL_Event e) {
@@ -119,10 +158,15 @@ void Wrapper::handleWindowEvent(SDL_Event e) {
 }
 
 void Wrapper::drawEverything() {
-    // Priority sorting has not been implemented yet.
-    for(int i = 0; i < drawables.size(); i++) {
-        SDL_RenderCopy(renderer, drawables[i]->getTexture(), NULL, drawables[i]->getRect());
+    for(int i = 0; i < trackPieces.size(); i++) {
+        SDL_RenderCopy(renderer, trackPieces[i]->getTexture(), NULL, trackPieces[i]->getRect());
+        SDL_RenderDrawRect(renderer, trackPieces[i]->boundingBoxes[1]);
     }
+
+    SDL_RenderCopy(renderer, car1->getTexture(), NULL, car1->getRect());
+
+    // Priority sorting has not been implemented yet.
+
 }
 
 

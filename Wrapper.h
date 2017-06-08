@@ -1,5 +1,5 @@
-#include "DrawableWithPriority.h"
-
+#include "Car.h"
+#include "TrackPiece.h"
 #pragma once
 
 
@@ -15,15 +15,18 @@ public:
     void drawEverything(void);
     void quitEverything(void);
     void deleteDrawables(void);
+    void makeTrackLine(bool vertical, int lengthUnits, int startX, int startY);
+    void makeTrack(void);
     void updateEverything(void);
     bool checkForCollision(DrawableWithPriority* obj1, DrawableWithPriority* obj2);
+    bool checkIfCarOnTrack(void);
 
 private:
     SDL_Window *window;
     SDL_Renderer *renderer;
     uint32_t context;
     bool running;
-    std::vector<DrawableWithPriority *> drawables;
-
+    std::vector<TrackPiece *> trackPieces;
+    Car * car1;
 };
 
