@@ -7,19 +7,29 @@
 #include <cstdlib>
 
 #pragma once
-class DrawableWithPriority
-{
-    public:
-        DrawableWithPriority();
-        ~DrawableWithPriority();
-        DrawableWithPriority(const DrawableWithPriority& other);
-        DrawableWithPriority& operator=(const DrawableWithPriority& other);
+class DrawableWithPriority {
+public:
+    DrawableWithPriority(SDL_Renderer * &renderer, std::string image, int x, int y, int w, int h, int newPriority);
+    ~DrawableWithPriority();
+    DrawableWithPriority(const DrawableWithPriority& other);
+    DrawableWithPriority& operator=(const DrawableWithPriority& other);
+    void setXPosition(int x);
+    void setYPosition(int y);
+    void setHeight(int h);
+    void setWidth(int w);
 
-
-    protected:
-    private:
-        SDL_Surface surface;
-
+    SDL_Texture * getTexture(void);
+    int getXPosition(void);
+    int getYPosition(void);
+    int getHeight(void);
+    int getWidth(void);
+    SDL_Rect * getRect(void);
+protected:
+private:
+    SDL_Surface * surface;
+    SDL_Texture * texture;
+    SDL_Rect rect;
+    int priority;
 
 
 };
