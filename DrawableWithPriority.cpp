@@ -9,12 +9,33 @@ DrawableWithPriority::DrawableWithPriority(SDL_Renderer * &renderer, std::string
     rect.y = y;
     rect.w = w;
     rect.h = h;
+    boundingBoxes.push_back(&rect);
 }
 
 DrawableWithPriority::~DrawableWithPriority() {
     //SDL_FreeSurface(surface);
     std::cout << "Deleted";
     // There might be other cleanup that needs to occur here.
+}
+
+void DrawableWithPriority::setPosition(int x, int y) {
+    setXPosition(x);
+    setYPosition(y);
+}
+
+void DrawableWithPriority::setVelocity(double rightward, double downward) {
+    downwardVelocity = downward;
+    rightwardVelocity = rightward;
+}
+
+void DrawableWithPriority::onUpdate(void) {
+    rect.x += rightwardVelocity;
+    rect.y += downwardVelocity;
+}
+
+void DrawableWithPriority::modifyVelocity(double deltaX, double deltaY) {
+    downwardVelocity += deltaY;
+    rightwardVelocity +=  deltaX;
 }
 
 

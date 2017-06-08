@@ -15,6 +15,9 @@ public:
     void drawEverything(void);
     void quitEverything(void);
     void deleteDrawables(void);
+    void updateEverything(void);
+    bool checkForCollision(DrawableWithPriority* obj1, DrawableWithPriority* obj2);
+
 private:
     SDL_Window *window;
     SDL_Renderer *renderer;
