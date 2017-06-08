@@ -26,14 +26,15 @@ public:
     int getYPosition(void);
     int getHeight(void);
     int getWidth(void);
-    std::vector<SDL_Rect *> boundingBoxes;
+    std::vector<SDL_Rect *> boundingBoxes; // index zero of this vector is the same as rect (below). Other indexes are used for
+    // collision detection
     SDL_Rect * getRect(void);
 
 protected:
 private:
     SDL_Surface * surface;
     SDL_Texture * texture;
-    SDL_Rect rect;
+    SDL_Rect rect; // this is the dimensions for the visually presented sprite
 
     int priority;
     double downwardVelocity;
