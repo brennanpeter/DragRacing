@@ -36,12 +36,15 @@ Wrapper::Wrapper() {
                 break;
             }
         }
-        SDL_RenderClear(renderer);
-        drawEverything();
-        SDL_RenderPresent(renderer);
-        SDL_Delay(10);
-        checkForCollision(drawables[0], drawables[1]);
-        updateEverything();
+        if(running) {
+            SDL_RenderClear(renderer);
+            drawEverything();
+            SDL_RenderPresent(renderer);
+            SDL_Delay(10);
+            checkForCollision(drawables[0], drawables[1]);
+            updateEverything();
+        }
+
 
     }
 
