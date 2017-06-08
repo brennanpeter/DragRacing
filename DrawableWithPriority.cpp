@@ -3,6 +3,7 @@
 DrawableWithPriority::DrawableWithPriority(SDL_Renderer * &renderer, std::string image, int x, int y, int w, int h, int newPriority) {
     surface = IMG_Load(image.c_str());
     texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface); // I think this is where this should go
     priority = newPriority;
     rect.x = x;
     rect.y = y;
@@ -11,7 +12,7 @@ DrawableWithPriority::DrawableWithPriority(SDL_Renderer * &renderer, std::string
 }
 
 DrawableWithPriority::~DrawableWithPriority() {
-    SDL_FreeSurface(surface);
+    //SDL_FreeSurface(surface);
     std::cout << "Deleted";
     // There might be other cleanup that needs to occur here.
 }
