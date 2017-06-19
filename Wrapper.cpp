@@ -1,16 +1,17 @@
-#include "Wrapper.h"
-#include "Contexts.h"
 
+#include "Wrapper.h"
 
 Wrapper::Wrapper() {
     running = true;
+    TrackPieceStorage * trackStorage = new TrackPieceStorage();
     SDL_Init(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
     context = visible;
-
+    trackStorage->readFromFile();
+    makeTrack();
     window = SDL_CreateWindow("Hello", 10, 10, 800, 600, 0);
     renderer = SDL_CreateRenderer(window, -1, 0);
-    SDL_SetRenderDrawColor(renderer, 11, 102, 35, 255);
+    SDL_SetRenderDrawColor(renderer, 11, 200, 35, 255);
     makeTrack();
     SDL_WarpMouseInWindow(window, 225, 225);
     //drawables.push_back(new DrawableWithPriority(renderer, std::string("assets/images/marybday.JPG"), 300, 140, 300, 300, 1));
@@ -42,13 +43,11 @@ Wrapper::Wrapper() {
             SDL_RenderClear(renderer);
             drawEverything();
             SDL_RenderPresent(renderer);
-            SDL_Delay(10);
-            //checkForCollision(drawables[0], car1);
             if(!(checkIfCarOnTrack())) {
-                SDL_SetRenderDrawColor(renderer, 150, 0, 0, 255);
+                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
             }
             else {
-                SDL_SetRenderDrawColor(renderer, 11, 102, 35, 255);
+                SDL_SetRenderDrawColor(renderer, 11, 200, 35, 255);
             }
             updateEverything();
         }
@@ -88,8 +87,8 @@ void Wrapper::makeTrackLine(bool vertical, int lengthUnits, int startX, int star
 }
 
 bool Wrapper::checkForCollision(DrawableWithPriority* obj1, DrawableWithPriority* obj2) {
-    for(int i = 1; i < obj1->boundingBoxes.size(); i++) {
-        for(int x = 1; x < obj2->boundingBoxes.size(); x++) {
+    for(unsigned int i = 1; i < obj1->boundingBoxes.size(); i++) {
+        for(unsigned int x = 1; x < obj2->boundingBoxes.size(); x++) {
             if(SDL_HasIntersection(obj2->boundingBoxes[x], obj1->boundingBoxes[i]) == true) {
                 return true;
             }
