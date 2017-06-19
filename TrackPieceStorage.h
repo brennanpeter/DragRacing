@@ -6,7 +6,7 @@
 class TrackPieceStorage
 {
     public:
-        TrackPieceStorage();
+        TrackPieceStorage(SDL_Renderer * theRenderer);
         std::vector<TrackPiece *> * getTrackPieces(void);
         void readFromFile(void);
         void writeToFile(void);
@@ -15,6 +15,7 @@ class TrackPieceStorage
     protected:
 
     private:
+        SDL_Renderer * renderer;
         std::vector<TrackPiece *> trackPieces;
 };
 

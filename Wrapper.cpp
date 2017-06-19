@@ -3,14 +3,16 @@
 
 Wrapper::Wrapper() {
     running = true;
-    TrackPieceStorage * trackStorage = new TrackPieceStorage();
+
     SDL_Init(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
     context = visible;
-    trackStorage->readFromFile();
+
     makeTrack();
     window = SDL_CreateWindow("Hello", 10, 10, 800, 600, 0);
     renderer = SDL_CreateRenderer(window, -1, 0);
+    TrackPieceStorage * trackStorage = new TrackPieceStorage(renderer);
+    trackStorage->readFromFile();
     SDL_SetRenderDrawColor(renderer, 11, 200, 35, 255);
     makeTrack();
     SDL_WarpMouseInWindow(window, 225, 225);
