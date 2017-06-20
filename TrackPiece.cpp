@@ -32,6 +32,12 @@ void TrackPiece::updateBoundingBox(void) {
     }
 }
 
+
+std::ostream &operator<<( std::ostream &output, const TrackPiece &t ) {
+    output << t.tx << "," << t.ty << "," << (int)t.vertical << std::endl;
+    return output;
+}
+
 TrackPiece::~TrackPiece() {
     //dtor
 }

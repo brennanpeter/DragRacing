@@ -8,6 +8,7 @@ class TrackPieceStorage
     public:
         TrackPieceStorage(SDL_Renderer * &theRenderer);
         std::vector<TrackPiece *> getTrackPieces(void);
+        void setTrackPieces(std::vector<TrackPiece *>);
         void readFromFile(void);
         void writeToFile(void);
 

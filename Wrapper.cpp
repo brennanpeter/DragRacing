@@ -174,8 +174,22 @@ void Wrapper::handleMouseButtonEvent(SDL_Event e) {
 void Wrapper::handleKeyEvent(SDL_Event e) {
     if(e.type == SDL_KEYUP) {
         if(e.key.keysym.sym == SDLK_m) {
-            std::cout << "mode changed to editing\n";
-            mode = 2; // track editing mode
+            if(mode == 1) {
+                std::cout << "mode changed to editing\n";
+                mode = 2; // track editing mode
+            }
+            else if(mode == 2) {
+                std::cout << "mode changed to playing\n";
+                mode = 1; // track editing mode
+            }
+        }
+        else if(e.key.keysym.sym == SDLK_w) {
+            if(mode == 2) {
+                trackStorage->setTrackPieces(trackPieces);
+                trackStorage->writeToFile();
+
+            }
+
         }
         if(e.key.keysym.sym == SDLK_ESCAPE || e.key.keysym.sym == SDLK_q) {
             std::cout << "Started quitting\n";
