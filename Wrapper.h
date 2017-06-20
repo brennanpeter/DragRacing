@@ -23,12 +23,14 @@ public:
     void updateEverything(void);
     bool checkForCollision(DrawableWithPriority* obj1, DrawableWithPriority* obj2);
     bool checkIfCarOnTrack(void);
+    int whichTrackPieceMouseOn(void);
 
 private:
     SDL_Window *window;
     SDL_Renderer *renderer;
-    uint32_t context;
+    int mode;
     bool running;
+
     TrackPieceStorage * trackStorage;
     std::vector<TrackPiece *> trackPieces;
     Car * car1;

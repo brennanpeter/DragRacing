@@ -4,21 +4,32 @@
 TrackPiece::TrackPiece(SDL_Renderer * &renderer, int x, int y, bool vert) : DrawableWithPriority(renderer, "assets/images/trackpiece.jpg", x, y, 50, 50, 1) {
     boundingBoxes.push_back(new SDL_Rect());
     vertical = vert;
-    if(vert) {
-        boundingBoxes[1]->x = x + 22;
-        boundingBoxes[1]->y = y;
+    tx = x;
+    ty = y;
+    updateBoundingBox();
+}
+
+
+void TrackPiece::toggleOrientation(void) {
+    std::cout << vertical << std::endl;
+    vertical = !vertical;
+    std::cout << vertical << std::endl;
+    updateBoundingBox();
+}
+
+void TrackPiece::updateBoundingBox(void) {
+    if(vertical) {
+        boundingBoxes[1]->x = tx + 22;
+        boundingBoxes[1]->y = ty;
         boundingBoxes[1]->w = 5;
         boundingBoxes[1]->h = 50;
     }
     else {
-        boundingBoxes[1]->x = x;
-        boundingBoxes[1]->y = y + 22;
+        boundingBoxes[1]->x = tx;
+        boundingBoxes[1]->y = ty + 22;
         boundingBoxes[1]->w = 50;
         boundingBoxes[1]->h = 5;
     }
-
-
-
 }
 
 TrackPiece::~TrackPiece() {
