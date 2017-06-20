@@ -149,14 +149,32 @@ void Wrapper::handleMouseButtonEvent(SDL_Event e) {
     if(mode == 2) {
         if(e.type == SDL_MOUSEBUTTONUP) {
             if(e.button.button == SDL_BUTTON_LEFT) {
-                int x, y, roundedX, roundedY;
-                SDL_GetMouseState(&x, &y);
-                roundedX = (x / 50) * 50;
-                roundedY = (y / 50) * 50;
-                if(whichTrackPieceMouseOn() == -1) { // Make sure it's not already on a track piece
-                    trackPieces.push_back(new TrackPiece(renderer, roundedX, roundedY, true));
+                if(SDL_GetKeyboardState(NULL)[SDL_SCANCODE_LSHIFT]) {
+                    std::cout << "fired!\n";
+                    int index = whichTrackPieceMouseOn();
+                    if(index != -1) { // Make sure it's not already on a track piece
+                        delete trackPieces[index];
+                        trackPieces.erase(trackPieces.begin() + index);
+                    }
+                }
+                else {
+                    int x, y, roundedX, roundedY;
+                    SDL_GetMouseState(&x, &y);
+                    roundedX = (x / 50) * 50;
+                    roundedY = (y / 50) * 50;
+                    if(whichTrackPieceMouseOn() == -1) { // Make sure it's not already on a track piece
+                        trackPieces.push_back(new TrackPiece(renderer, roundedX, roundedY, true));
+                    }
                 }
 
+            }
+            else if(e.button.button == SDL_BUTTON_RIGHT) {
+                std::cout << "right clicked\n";
+                int trackPieceIndex = whichTrackPieceMouseOn();
+                if(trackPieceIndex != -1) {
+                    trackPieces[trackPieceIndex]->toggleOrientation();
+                    std::cout << "Toggled orientation" << std::endl;
+                }
             }
             else if(e.button.button == SDL_BUTTON_RIGHT) {
                 std::cout << "right clicked\n";
