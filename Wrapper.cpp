@@ -8,16 +8,15 @@ Wrapper::Wrapper() {
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
     context = visible;
 
-    makeTrack();
+    //makeTrack();
     window = SDL_CreateWindow("Hello", 10, 10, 800, 600, 0);
     renderer = SDL_CreateRenderer(window, -1, 0);
-    TrackPieceStorage * trackStorage = new TrackPieceStorage(renderer);
+    trackStorage = new TrackPieceStorage(renderer);
     trackStorage->readFromFile();
+    trackPieces = trackStorage->getTrackPieces();
     SDL_SetRenderDrawColor(renderer, 11, 200, 35, 255);
-    makeTrack();
+    //makeTrack();
     SDL_WarpMouseInWindow(window, 225, 225);
-    //drawables.push_back(new DrawableWithPriority(renderer, std::string("assets/images/marybday.JPG"), 300, 140, 300, 300, 1));
-    //drawables.push_back(new DrawableWithPriority(renderer, std::string("assets/images/awesome.png"), 400, 100, 100, 100, 1));
 
     car1 = new Car(renderer);
     while(running) {
@@ -113,6 +112,7 @@ bool Wrapper::checkIfCarOnTrack(void) {
 
 void Wrapper::quitEverything(void) {
     IMG_Quit();
+    delete trackStorage;
     deleteDrawables();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

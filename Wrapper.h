@@ -29,6 +29,7 @@ private:
     SDL_Renderer *renderer;
     uint32_t context;
     bool running;
+    TrackPieceStorage * trackStorage;
     std::vector<TrackPiece *> trackPieces;
     Car * car1;
 };
